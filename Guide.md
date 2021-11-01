@@ -189,3 +189,163 @@ INDEX (APELLIDO)
 );
 ```
 
+### Uso del if exists/if not exist
+
+Crear una base de datos si no existe
+
+```mysql
+CREATE DATABASE IF NOT EXISTS ALMACENADORA;
+```
+
+Crear una tabla en una base de datos si no existe 
+
+```mysql
+CREATE TABLE IF NOT EXISTS CLIENTE (ID INT);
+```
+
+Eliminar una tabla si existe en una base de datos;
+
+```mysql
+DROP TABLE IF EXISTS CLIENTE;
+```
+
+## Lenguaje de manipulación de datos (DML)
+
+- CREATE
+- DELETE
+- INSERT
+- UPDATE
+- SELECT
+
+Insertar un dato en la tabla con *INSERT*
+
+```mysql
+INSERT INTO datopersonal (ID, NOMBRE, APELLIDO, EDAD, DPI, PASAPORTE, SEXO)
+VALUES (NULL,"Pablo","Caceros",23,219831628,"888888","M");
+```
+
+> Si vamos a ingresar todos los datos existentes en la tabla podemos omitir colocar los campos y colocar directamente los valores.
+
+```mysql
+INSERT INTO datopersonal 
+VALUES (NULL,"Pablo","Caceros",23,219831628,"888888","M");
+```
+
+Para realizar un INSERT múltiple
+
+```mysql
+INSERT INTO datopersonal 
+VALUES (NULL,"Pablo","Caceros",23,219831628,"888888","M"),
+(NULL,"Daniel","Pineda",15,987987555,"111111","M");
+```
+
+Actualizar un dato con *UPDATE*
+
+```mysql
+UPDATE datopersonal SET EDAD = 1;
+```
+
+> Si no especificamos una sentencia WHERE el update se realizara de manera general sobre todos los registros de la base de datos;
+
+```mysql
+UPDATE datopersonal SET EDAD = 1 WHERE ID = 1;
+```
+
+Seleccionar registros con la sentencia *SELECT*
+
+```mysql
+SELECT * FROM datopersonal;
+SELECT ID, NOMBRE, APELLIDO FROM datopersonal;
+SELECT ID, NOMBRE, APELLIDO FROM datopersonal WHERE ID = 21;
+```
+
+Eliminar un registro mediante la sentencia *DELETE*
+
+```mysql
+DELETE FROM datopersonal WHERE ID = 4;
+```
+
+> Del mismo modo si no se usa la condicional WHERE el comando se ejecuta de manera generalizada sobre todos los registros de la base de datos;
+
+Hacer uso de la sentencia *TRUNCATE*  para limpiar una tabla.
+
+```mysql
+TRUNCATE persona;
+```
+
+## Motores de almacenamiento
+
+Un motor de base de datos se encarga de manejar, controlar y dirigir las diferentes transacciones que realizamos a la base de datos actualmente y a partir de la versión 5.7 de MYSQL se utiliza InnoDB. 
+
+Para ver los motores de almacenamiento. 
+
+```mysql
+SHOW ENGINES;
+```
+
+> Si la tabla no puede mostrarse en su totalidad en la terminal por el tamaño de la misma, podemos utilizar el siguiente comando, para desplegar la información en forma de lista. 
+
+```mysql
+SHOW ENGINES\G;
+```
+
+## Llaves foraneas  (Foreing Key)
+
+Para este ejemplo se plantean dos tablas una de Departamentos y otra de clientes. 
+
+```mysql
+-- Creación de la tabla de departamento
+CREATE TABLE DEPARTAMENTO (
+ID INT NOT NULL AUTO_INCREMENT, 
+NOMBRE VARCHAR(22) NOT NULL,
+PRIMARY KEY (ID)
+);
+
+-- Creacion de la tabla cliente
+
+CREATE TABLE CLIENTE (
+ID INT NOT NULL AUTO_INCREMENT, 
+NOMBRE VARCHAR(20) NOT NULL, 
+APELLIDO VARCHAR(20) NOT NULL,
+DEP_ID INT, 
+PRIMARY KEY (ID),
+FOREIGN KEY DEP_ID REFERENCES DEPARTAMENTO (ID)
+);
+```
+
+Eliminar una llave foranea
+
+```mysql
+-- Para visualizar el nombre por defecto de la relacion
+SHOW CREATE TABLE CLIENTE;
+-- Luego para eliminarlo solo necesitamos referenciar el nombre
+ALTER TABLE CLIENTE DROP FOREIGN KEY cliente_ibfk_1;
+```
+
+### Comportamientos
+
+- RESTRICT
+
+  Restringe la integridad de la data que esta relacionada. 
+
+- CASCADE
+
+  Borra los registros de la tabla dependiente. 
+
+- SET NULL
+
+  Convierte en null los registros que estén ligados en la relacion. 
+
+  ```mysql
+  ALTER TABLE CLIENTE ADD FOREIGN KEY (DEP_ID) REFERENCES DEPARTAMENTO (ID)
+  ON DELETE CASCADE ON UPDATE CASCADE;
+  ```
+
+  
+
+
+
+
+
+
+
