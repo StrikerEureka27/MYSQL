@@ -341,11 +341,137 @@ ALTER TABLE CLIENTE DROP FOREIGN KEY cliente_ibfk_1;
   ON DELETE CASCADE ON UPDATE CASCADE;
   ```
 
+  ## Importar y exportar bases de datos
   
+  En caso de que el archivo .sql contengan las instrucciones para crear una base de datos podemos utilizar el siguiente comando para importar una base de datos:
+  
+  ```mysql
+  mysql -u root -p < C:\Users\striker\Documents\Database\MYSQL\world.sql
+  ```
+  
+  Para exportar la base de datos:
+  
+  ```mysql
+  mysqldump -u root -p <  C:\Users\striker\Documents\Database\MYSQL\nombre*
+  ```
+  
+  Si debemos de crear la base de datos previamente utilizamos el siguiente comando:
+  
+  ```mysql
+  CREATE DATABASE prueba;
+  mysql -u root -p prueba > C:\Users\striker\Documents\Database\MYSQL\nombre*
+  ```
+  
+  ### Forma alternativa de importar 
+  
+  Al estar sobre la base de datos deseada:
+  
+  ```
+  sourceC:\Users\striker\Documents\Database\MYSQL\nombrearchivo.sql
+  ```
+  
+  ## Select múltiple 
+  
+  ```mysql
+  use world;
+  -- City
+  -- country 
+  -- contrylanguage
+  
+  SELECT * FROM country;
+  SELECT name, region FROM country;
+  ```
+  
+  ## Select + distinct
 
+```mysql
+-- Mostrar registros unicos no duplicados
+SELECT DISTINCT CountryCode FROM countrylanguage;
+```
 
+## 	  Select + Alias
 
+```mysql
+-- Colocarle un alias distinto a la busqueda
+SELECT DISTINCT CountryCode AS "codigopais" FROM countrylanguage;
+```
 
+## Uso de la condicional where
+
+```mysql
+SELECT * FROM country;
+SELECT Code, Name, Continent FROM country WHERE Code="ALB";
+-- Para negar una condicional
+SELECT Code, Name, Continent FROM country WHERE Continent<>"Europe";
+-- Buscar el campo mayor
+SELECT Code,Name,Continent FROM country WHERE SurfaceArea > 15000;
+
+```
+
+### Uso de where con <=>, !=
+
+```mysql
+SELECT Code, Name, Continent FROM country WHERE Continent!="Europe";
+```
+
+Comparación de valores incluyendo null con <=>
+
+```mysql
+SELECT Code,Name,Continent FROM country WHERE IndepYear <=> Capital;
+```
+
+### Uso de order by, and, &&, or y limit
+
+```mysql
+-- Order by
+SELECT * FROM country ORDER BY Code DESC
+SELECT * FROM country ORDER BY Code ASC
+-- Limit: Limita el numero de tuplas
+SELECT * FROM country ORDER BY Code DESC LIMIT 5
+/* Podemos navegar por las diferentes paginaciones de tuplas */
+SELECT * FROM country ORDER BY Code DESC LIMIT 0,5
+-- And
+SELECT * FROM country WHERE Continent='Asia' AND SurfaceArea > 15000 ORDER BY Code ASC;
+-- Doble And
+SELECT * FROM country 
+WHERE Continent='Asia' 
+AND SurfaceArea > 15000 
+AND Population > 10000000
+ORDER BY Code ASC;
+-- Equivalente
+SELECT * FROM country 
+WHERE Continent='Asia' 
+&& SurfaceArea > 15000 
+&& Population > 10000000
+ORDER BY Code ASC;
+-- Or
+SELECT Code, Name FROM country
+WHERE Code = "ADW" OR Code="AGO";
+-- Equivalente 
+SELECT Code, Name FROM country
+WHERE Code = "ADW" || Code="AGO";
+```
+
+## Uso de null y is not null
+
+```mysql
+-- Valores que no son null
+SELECT * FROM country WHERE IndepYear IS NOT NULL;
+-- Valores null
+SELECT * FROM country WHERE IndepYear IS NULL;
+```
+
+## Uso de IN y Between
+
+```mysql
+-- IN
+SELECT * FROM country WHERE Code IN ('ABW','ARG','USA');
+SELECT * FROM country WHERE Code NOT IN ('ABW','ARG','USA');
+-- BETWEEN
+SELECT Code,Name,Region,SurfaceArea FROM country 
+WHERE SurfaceArea BETWEEN 1 AND 16
+ORDER BY Code ASC;
+```
 
 
 
