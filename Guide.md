@@ -20,7 +20,8 @@ mysql -u root -p
 
 ## Manejo de usuarios - Actualizar contraseña
 
-```ALTER USER 'testgrafana'@'%' IDENTIFIED BY 'p_B''GZ2*Bwr.-Q=-';
+```
+ALTER USER 'testgrafana'@'%' IDENTIFIED BY 'p_B''GZ2*Bwr.-Q=-';
 FLUSH PRIVILEGES;
    ```
 
