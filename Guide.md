@@ -18,31 +18,26 @@ Conexión a MYSQL en Linux
 mysql -u root -p 
 ```
 
-## Manejo de usuarios - Actualizar contraseña
-
-```
-ALTER USER 'testgrafana'@'%' IDENTIFIED BY 'p_B''GZ2*Bwr.-Q=-';
-FLUSH PRIVILEGES;
-   ```
-
 ## Sentencias DDL 
+
+Lenguaje de definición de datos, definido por las instrucciones  que manejan la estructura de la base de datos, mantener, configurar y producir. 
 
 Visualizar las diferente bases de datos de nuestro servidor. 
 
 ```mysql
-show databases;
+SHOW DATABASES;
 ```
 
 Crear una base de datos. 
 
 ```mysql
-create database prueba;
+CREATE DATABASES prueba;
 ```
 
 Eliminar una base de datos;
 
-```
-drop database prueba;
+```mysql
+DROP DATABASES prueba;
 ```
 
 ### CRUD básico 
@@ -120,7 +115,7 @@ Codigo Realizado por Pablo Daniel Caceros Pineda
 
 ### Renombrar tablas existentes
 
-```
+```mysql
 ALTER TABLE Persona RENAME People;
 ```
 
@@ -480,5 +475,10 @@ WHERE SurfaceArea BETWEEN 1 AND 16
 ORDER BY Code ASC;
 ```
 
+## Manejo de usuarios - Actualizar contraseña
 
+```
+ALTER USER 'testgrafana'@'%' IDENTIFIED BY 'p_B''GZ2*Bwr.-Q=-';
+FLUSH PRIVILEGES;
+```
 
