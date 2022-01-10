@@ -475,6 +475,57 @@ WHERE SurfaceArea BETWEEN 1 AND 16
 ORDER BY Code ASC;
 ```
 
+## Uso de LIKE
+
+```mysql
+SELECT * FROM country WHERE Name LIKE "Guatemala";
+SELECT * FROM country WHERE Name LIKE "%Guatemala";
+SELECT * FROM country WHERE Name LIKE "Guatemala%";
+SELECT * FROM country WHERE Name LIKE "%Guatemala%";
+```
+
+### Definir el numero de caracteres
+
+```mysql
+SELECT * FROM country WHERE Name LIKE "G_____";
+```
+
+## Uso de concat y concat_ws
+
+```mysql
+-- concat
+SELECT concat(code, name, Continent) FROM Country;
+SELECT concat(Code," ",name," "Continent) AS "CampoCompuesto" FROM Country;
+-- concat_ws
+SELECT concat_ws("-",code, name, Continent) FROM Country;
+```
+
+## Uso de del min, max, count y avg. 
+
+*Min* selecciona el valor mas bajo del campo especificado
+
+```mysql
+SELECT min(indepyear) FROM country WHERE code IN ('AFG','AGO')
+```
+
+*Count* realiza un conteo de los registros que coincidan
+
+```mysql
+SELECT Count(Code) FROM Country WHERE Population>=3703200;
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Manejo de usuarios - Actualizar contraseña
 
 ```
