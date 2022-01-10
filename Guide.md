@@ -514,11 +514,94 @@ SELECT min(indepyear) FROM country WHERE code IN ('AFG','AGO')
 SELECT Count(Code) FROM Country WHERE Population>=3703200;
 ```
 
+*Max* selecciona el valor mas alto del campo especificado.
 
+```mysql
+SELECT max(indepyear) FROM country;
+```
 
+*Sum* es para sumar el valor de los campos
 
+```mysql
+SELECT sum(Population) FROM Country WHERE SurfaceArea>=78000;		
+```
 
+*Avg* nos regresa el promedio del campo seleccionado
 
+```mysql
+SELECT avg(Population) AS "Promedio" FROM Country;
+```
+
+## Creación de tablas a partir de otra
+
+```mysql
+-- Sobre la misma base de datos
+CREATE TABLE Citybackup AS (SELECT * FROM City);		
+-- En una base de datos diferente
+CREATE TABLE basededatosnombre.citybackup2 AS (SELECT * FROM City);
+```
+
+## Uso de Union y Union all
+
+```mysql
+-- Se tiene las siguientes tablas
+SELECT * FROM ConjuntoA;
++------+------+
+| Col1 | Col2 |
++------+------+
+| a    | a    |
+| a    | b    |
+| a    | c    |
+| a    | d    |
+| a    | e    |
++------+------+ 
+SELECT * FROM ConjuntoB;
++------+------+
+| Col1 | Col2 |
++------+------+
+| a    | a    |
+| a    | b    |
+| a    | c    |
+| a    | d    |
+| a    | e    |
+| a    | f    |
++------+------+
+(SELECT * FROM ConjuntoA) UNION (SELECT * FROM ConjuntoB);
++------+------+
+| Col1 | Col2 |
++------+------+
+| a    | a    |
+| a    | b    |
+| a    | c    |
+| a    | d    |
+| a    | e    |
+| a    | f    |
++------+------+
+(SELECT * FROM ConjuntoA) UNION ALL (SELECT * FROM ConjuntoB);
+```
+
+## Uso de group BY
+
+Se utiliza para agrupar tuplas, por lo regular el caso de uso seria un valor repetitivo que compartan diferentes registros. 
+
+```mysql
+SELECT ContryCode, count(name), max(Population), min(Population), avg(Population) 
+FROM City 
+GROUP BY (CountryCode)
+ORDER BY CountryCode ASC LIMIT 10; 
+```
+
+## Uso de HAVING y la diferencia con WHERE
+
+La condicional *WHERE* no funciona utilizando funciones de agrupacion tales como max(), min(), sum(), avg()
+
+```mysql
+SELECT ContryCode, count(name), max(Population), min(Population), avg(Population) 
+FROM City
+GROUP BY (CountryCode)
+HAVING count(name) > 1
+ORDER BY count(name);
+```
 
 
 
