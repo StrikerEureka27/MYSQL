@@ -614,6 +614,87 @@ INNER JOIN city t
 ON c.code=t.CountryCode;
 ```
 
+## Para los siguientes ejemplos se utilizo la siguiente base de datos 
+
+```mysql
+CREATE TABLE departament (
+	`id` INT NOT NULL AUTO_INCREMENT, 
+    `name` VARCHAR(255), 
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE payment(
+	`id` INT NOT NULL AUTO_INCREMENT, 
+    `mount` VARCHAR(255), 
+    `iduser` INT, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY (`iduser`) REFERENCES users(`id`)
+);
+
+CREATE TABLE users (
+	`id` INT NOT NULL AUTO_INCREMENT, 
+    `name` VARCHAR(255), 
+    `iddep` INT, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY (`iddep`) REFERENCES departament(`id`)
+);
+```
+
+## Uso de left join
+
+A diferencia del INNER JOIN, podemos ver los datos coincidentes entre ambas tablas y los no coincidentes. 
+
+```mysql
+-- Si alguno de los usuario no fuera asignado a algun departamento lo podriamos ver con left join
+
+SELECT u.`name`, d.`name`
+FROM users u
+LEFT JOIN departament d
+ON u.iddep=d.id;
+
+-- Si comparamos con inner join
+
+SELECT u.`name`, d.`name`
+FROM users u
+INNER JOIN departament d
+ON u.iddep=d.id;
+
+```
+
+## Uso de right join
+
+```mysql
+-- Si quiero saber los departamentos que no estan asociados a un usuario
+
+SELECT u.name , d.name
+FROM users u
+RIGHT JOIN departament d
+ON u.iddep=d.id;
+
+-- comparacion con inner join
+
+SELECT u.name , d.name
+FROM users u
+INNER JOIN departament d
+ON u.iddep=d.id;
+```
+
+## Uso de self join
+
+Es una manera abreviada o alternativa de realizar un inner join
+
+```mysql
+SELECT u.name, d.name
+FROM users u, departament d
+WHERE u.iddep=d.id;
+```
+
+## Uso del case 
+
+```mysql
+
+```
+
 
 
 
