@@ -603,7 +603,16 @@ HAVING count(name) > 1
 ORDER BY count(name);
 ```
 
+## Uso de Inner Join
 
+Conceptualmente un *INNER JOIN* no es mas que la intersección entre dos conjuntos 
+
+```mysql
+SELECT c.`Name`, c.`Continent`, c.`Population`, t.`Name` AS "Capitales" 
+FROM country c
+INNER JOIN city t
+ON c.code=t.CountryCode;
+```
 
 
 
@@ -612,7 +621,7 @@ ORDER BY count(name);
 ## Manejo de usuarios - Actualizar contraseña
 
 ```
-ALTER USER 'testgrafana'@'%' IDENTIFIED BY 'p_B''GZ2*Bwr.-Q=-';
+ALTER USER 'testgrafana'@'%' IDENTIFIED BY '';
 FLUSH PRIVILEGES;
 ```
 
