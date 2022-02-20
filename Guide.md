@@ -692,10 +692,212 @@ WHERE u.iddep=d.id;
 ## Uso del case 
 
 ```mysql
+SELECT Name, IndepYear,
+CASE 
+WHEN IndepYear is null THEN "Es null"
+WHEN IndepYear>1500 THEN "Es mayor a 1950"
+ELSE "Es menor a 1500"
+END AS "Resultado"
+FROM Country 
+```
 
+## Funciones de tipo String,: LTRIM, RTRIM y TRIM 
+
+- LTRIM eliminar espacios del lado izq. 
+
+```mysql
+SELECT LTRIM(Name) from Country;
+```
+
+- RTTRIM eliminar espacios del lado derecho. 
+
+```mysql
+SELECT RTRIM(Name) from Country;
+```
+
+- TRIM elimina los espacios de ambos lados. 
+
+```mysql
+SELECT TRIM(Name) from Country;
+```
+
+> ***Nota:***  Estas funciones no pueden eliminar espacios entre palabras. 
+
+## Funciones de tipo String:  UCASE, UPPER, LCASE, LOWER
+
+- UCASE: Pone el texto en mayuscula. 
+
+```mysql
+SELECT UCASE(Name) FROM Country;		
+```
+
+- UPPER: Alternativa a UCASE 
+
+```mysql
+SELECT UPPER(Name) FROM Country;
+```
+
+- LCASE: Pone el texto en minuscula. 
+
+```mysql
+SELECT LCASE(Name) FROM Country;
+```
+
+- LOWER: Alternativa a LCASE;
+
+```mysql
+SELECT LCASE(Name) FROM Country;
 ```
 
 
+
+## Funciones de tipo String: Length, char_length y character_length
+
+- LENGTH: Devuelve el numero de caracteres de una cadena. 
+
+```mysql
+SELECT Name, LENGTH(Name) FROM Country;
+```
+
+- CHAR_LENGTH: Es una alternativa a LENGTH;
+
+```mysql
+SELECT Name, CHAR_LENGTH(Name) FROM Country;
+```
+
+- CHARACTER_LEGTH: Es otra alternativa alas funciones LENGTH y CHAR_LENGTH;
+
+```mysql
+SELECT Name, CHARACTER_LENGTH(Name) FROM Country;
+```
+
+
+
+## Funciones de tipo String: INSTR, LOCATE y POSITION;
+
+- INSTR: Buscar caracteres dentro de un campo y tenor como salida la posición.
+
+```mysql
+SELECT Name, INSTR(Name, "ar") FROM Country;
+```
+
+- POSITION: Alternativa a INSTR
+
+```mysql
+SELECT Name, POSITION("ar" in Name) FROM Country;
+```
+
+- LOCATE: Alternativa a INSTR y POSITION
+
+```mysql
+-- A diferencia de las otras le podemos inidcar desde quie poscision empezar a buscar
+SELECT Name, LOCATE("ar", Name, 3) FROM Country;
+```
+
+## Funciones de tipo String: LPAD, RPAD, LEFT, RIGTH, SUBSTR, SUBSTRING, SUBSTRING_INDEX. 
+
+- LPAD: Cumple la función de agregar un carácter del lado izquierdo especifico una n cantidad de veces. 
+
+```mysql
+SELECT Name, LPAD(Name, 20, "*") AS "Modificado" FROM Country;
+
+-- Salida 
+'Afghanistan', '*********Afghanistan'
+'Albania', '*************Albania'
+
+```
+
+- RPAD: Cumple la función de agregar un carácter del lado izquierdo especifico una n cantidad de veces. 
+
+```mysql
+SELECT Name, RPAD(Name, 20, "*") AS "Modificado" FROM Country;
+
+-- Salida 
+'Aruba', 'Aruba***************'
+'Afghanistan', 'Afghanistan*********'
+
+```
+
+- RIGTH: Nos permite recortar los caracteres de un campo del lado derecho. 
+
+```mysql
+SELECT Name, RIGHT(Name, 4) AS "Recortado" FROM Country;
+```
+
+- LEFT:   Nos permite recortar los caracteres de un campo del lado izquierdo.
+
+```mysql
+SELECT Name, LEFT(Name, 4) AS "Recortado" FROM Country;
+```
+
+- SUBSTR: Nos permite recortar desde un carácter especifico una n cantidad de caracteres. 
+
+```mysql
+--            [CAMPO] [DESDE] [CUANTOS]
+SELECT Name, SUBSTR(Name, 2, 5) AS "Recortado" FROM Country;
+-- Manera alternativa
+SELECT Name, SUBSTRING(Name, 2, 5) AS "Recortado" FROM Country;
+```
+
+- SUBSTRING_INDEX:  Recorta el campo hasta la primera coincidencia. 
+
+```mysql
+--                                     [COINCIDENCIA]
+SELECT Name, SUBSTRING_INDEX(Name, "a", 1) FROM Country;
+```
+
+## Ejemplo de uso de funciones de tipo String
+
+El ejercicio consta de tomar la inicial de los continentes en un campo individual, posteriormente se debe concatenar de nuevo. 
+
+```mysql
+SELECT continent, 
+LEFT(Name, 1) AS "Inicial", 
+SUBSTR(Name, 2, LENGTH(Name)-1) AS "Complemento", 
+CONCAT(LEFT(Name, 1), UCASE(SUBSTR(Name, 2, LENGTH(Name)-1))) AS "Concatenado"
+FROM Country;
+```
+
+
+
+## Uso de REPEAT, REPLACE, REVERSE, STRCMP y MID
+
+- REPEAT: Repite N cantidad de veces el valor del string
+
+```mysql
+SELECT Name, REPEAT(Name, 3) FROM Country;
+
+-- Aruba	ArubaArubaAruba
+```
+
+- REPLACE: Remplaza los caracteres con todas las coincidencias. 
+
+```mysql
+SELECT Name, REPLACE(Name, "a", "x") FROM Country;
+-- Afghanistan	Afghxnistxn
+```
+
+- REVERSE: Puede cambiar el orden de el string al reverso
+
+```mysql
+SELECT Name, REVERSE(Name) FROM Country;
+-- Aruba	aburA
+```
+
+- STRCMP: Nos sirve para conectar =cadenas de texto y nos da como un 0 si el campo coincide.
+
+```mysql
+SELECT Name, STRCMP(Name, "Aruba") FROM Country;
+```
+
+- MID: Alternativa a substring
+
+```mysql
+--                    [POSICION] [CORTAR]
+SELECT Name, MID(Name, 1, 3) FROM Country;
+```
+
+ 
 
 
 
