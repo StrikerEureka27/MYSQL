@@ -104,12 +104,52 @@ WHEN IndepYear is null THEN "Es null"
 WHEN IndepYear>1500 THEN "Es mayor a 1950"
 ELSE "Es menor a 1500"
 END AS "Resultado"
-FROM Country 
+FROM Country;
 
 
 
+SELECT 
+    UCASE(Name)
+FROM
+    Country;		
+    
+SELECT LOWER(Name) FROM Country;
 
 
+SELECT Name, LENGTH(Name) FROM Country;
+SELECT Name, CHARACTER_LENGTH(Name) FROM Country;
+
+SELECT Name, INSTR(Name, "ar") FROM Country;
+SELECT Name, POSITION("ar" in Name) FROM Country;
+
+
+SELECT LTRIM(Name) from Country;
+SELECT Name, LOCATE("ar", Name, 3) FROM Country;
+
+SELECT Name, RPAD(Name, 20, "*") AS "Modificado" FROM Country;
+
+SELECT Name, RIGHT(Name, 4) AS "Recortado" FROM Country;
+SELECT Name, LEFT(Name, 4) AS "Recortado" FROM Country;
+
+SELECT Name, SUBSTRING(Name, 2, 5) AS "Recortado" FROM Country;
+USE world;
+SELECT Name, SUBSTRING_INDEX(Name, "a", 1) FROM Country;
+
+-- EJEMPLOM DE USO DE STRING 
+
+SELECT continent, 
+LEFT(Name, 1) AS "Inicial", 
+SUBSTR(Name, 2, LENGTH(Name)-1) AS "Complemento", 
+CONCAT(LEFT(Name, 1), UCASE(SUBSTR(Name, 2, LENGTH(Name)-1))) AS "Concatenado"
+FROM Country;
+
+
+SELECT Name, REPEAT(Name, 3) FROM Country;
+SELECT Name, REPLACE(Name, "a", "x") FROM Country;
+SELECT Name, REVERSE(Name) FROM Country;
+
+
+SELECT Name, STRCMP(Name, "Aruba") FROM Country;
 
 
 

@@ -12,7 +12,7 @@ mysql -u root -p
 
 > Para instalar el comando mysql de forma global debemos de agregar la ruta de la carpeta bin a las variables de entorno del sistema operativo. 
 
-Conexión a MYSQL en Linux 
+Conexión a MYSQL en Linux  	 	
 
 ```mysql
 mysql -u root -p 
@@ -775,7 +775,7 @@ SELECT Name, CHARACTER_LENGTH(Name) FROM Country;
 
 ## Funciones de tipo String: INSTR, LOCATE y POSITION;
 
-- INSTR: Buscar caracteres dentro de un campo y tenor como salida la posición.
+- INSTR: Buscar caracteres dentro de un campo y tiene como salida la posición.
 
 ```mysql
 SELECT Name, INSTR(Name, "ar") FROM Country;
@@ -897,14 +897,267 @@ SELECT Name, STRCMP(Name, "Aruba") FROM Country;
 SELECT Name, MID(Name, 1, 3) FROM Country;
 ```
 
- 
+##  Funciones de fecha y hora
 
+### CURDATE() , CURRENT_DATE(), CURTIME(), CURRENT_TIME(), CURRENT_TIMESTAMP() y NOW()
 
+Fecha actual
 
-## Manejo de usuarios - Actualizar contraseña
+```mysql
+SELECT CURDATE(); -- Fecha actual
+-- Forma alternativa
+SELECT CURRENT_DATE();
+```
+
+Hora actual
+
+```mysql
+SELECT CURTIME();
+-- Forma alternatica
+SELECT CURRENT_TIME();
+```
+
+Fecha y hora
+
+```mysql
+SELECT CURRENT_TIMESTAMP();
+-- Forma alternativa
+SELECT NOW();
+```
+
+### DAYOFMONTH, DAYOFWEEK, DAYOFYEAR, MONTH, YEAR
+
+Obtener el día de una fecha
+
+```mysql
+SELECT DAY("2022-06-03")			
+-- Forma alternativa
+SELECT DAYOFMONTH("2022-06-03")
+```
+
+ Obtener el día de la semana
+
+```mysql
+SELECT DAYOFWEEK("2022-06-03");	
+```
+
+Obtener el día del año
+
+```mysql
+SELECT DAYOFYEAR("2022-06-03");
+```
+
+Obtener el mes del año
+
+```mysql
+SELECT MONTH("2022-06-03");
+```
+
+Obtener el año de la fecha
+
+```mysql
+SELECT YEAR("2022-06-03");
+```
+
+### LOCALTIME, LOCALTIMESTMAP, SYSDATE(), TIME, HOUR, MINUTE, SECOND
+
+Obtener la fecha y hora local
+
+```mysql
+SELECT LOCALTIME()
+-- Forma alternativa 
+SELECT LOCALTIMESTAMP()
+--  Forma alternativa
+SELECT SYSDATE();
+```
+
+Extraer la hora de una fecha 
+
+```mysql
+SELECT TIME(LOCALTIME);		
+```
+
+Podemos escalarlo para obtener la hora 
+
+```mysql
+SELECT HOUR(TIME(LOCALTIME));
+```
+
+Podemos escalarlo para obtener el minuto 
+
+```mysql
+SELECT MINUTE(TIME(LOCALTIME));
+```
+
+Podemos escalarlo para obtener el segundo
+
+```mysql
+SELECT SECOND(TIME(LOCALTIME));
+```
+
+Obtener el ultimo día del mes
+
+```mysql
+SELECT LAST_DAY("2022-06-03");
+```
+
+Convertir una fecha a números a partir del año cero
+
+```mysql
+SELECT TO_DAY("2022-06-03");
+-- Para realizar el inverso
+SELECT FROM_DAYS(TO_DAYS("2022-06-03"));
+```
+
+Para obtener el trimestre
 
 ```
-ALTER USER 'testgrafana'@'%' IDENTIFIED BY '';
+SELECT QUARTER(2022-06-03");
+```
+
+Obtener la semana del año en la que estamos 
+
+```mysql
+SELECT week("2022-06-03"); -- Tomar en cuenta que empieza desde 0
+-- Alternativa que empieza desde 1
+SELECT weekofyear("2022-06-03");
+```
+
+### DAYNAME, MONTHNAME, Y LC_TIME_NAMES
+
+Obtener el nombre de la semana
+
+```mysql
+SELECT DAYNAME("2020-06-03");
+```
+
+Obtener el nombre del mes
+
+```mysql
+SELECT MONTHNAME("2022-06-03");
+```
+
+Si tuviéramos la necesidad de cambiar la salida del idioma debemos de modificar la variable siguiente
+
+```
+@@lc_time_name
+```
+
+Para editar esta variable podemos hacer lo siguiente
+
+```mysql
+SET @@lc_time_names = 'es_GT'
+```
+
+### ADDDATE, ADDTIME, SUBDATE, SUBTIME
+
+Sumar días a  una fecha 
+
+```mysql
+SELECT ADDDATE("2022-06-03", 5);
+-- Alternative
+SELECT ADDDATE("2022-06-03", INTERVAL 5 DAY);
+SELECT ADDDATE("2022-06-03", INTERVAL 5 MONTH);
+SELECT ADDDATE("2022-06-03", INTERVAL 5 YEAR);
+SELECT ADDDATE("2022-06-03", INTERVAL 5 HOUR);
+SELECT ADDDATE("2022-06-03", INTERVAL 5 SECOND);
+```
+
+> *subdate* tiene el mismo funcionamiento con la diferencia que subdate es indiferente a los signos que utilizamos. 
+
+Sumar tiempo a una fecha 
+
+```mysql
+SELECT ADDTIME("2022-06-03", "01:05:03")
+-- Podemos aumentarle dias
+SELECT ADDTIME("2022-06-03", "5 01:05:03")
+```
+
+### DATE_ADD, DATE_SUB, DATE, DATEDIFF Y EXTRACT
+
+Comparar dos campos de fecha y ver la diferencia
+
+```mysql
+--              [FECHA MAYOR] [FECHA MENOR]
+SELECT DATEDIFF("2022-06-03", "2022-06-06");
+```
+
+Extraer una información especifica de un campo
+
+```mysql
+SELECT EXTRACT(HOUR FROM "2022-06-03");
+SELECT EXTRACT(DAY FROM "2022-06-03");
+SELECT EXTRACT(MONTH FROM "2022-06-03");
+```
+
+### DATE_FORMAT
+
+```mysql
+--				      [ESPECIFICADOR]
+SELECT DATE_FORMAT("2022-06-03", "%a")
+```
+
+
+
+| ESPECIFICADOR | DESCRIPCION                                                  |
+| ------------- | ------------------------------------------------------------ |
+| %a            | Día  de semana abreviado (Sun..Sat)                          |
+| %b            | Mes  abreviado (Jan..Dec)                                    |
+| %c            | Mes,  numérico (0..12)                                       |
+| %D            | Día  del mes con sufijo inglés (0th, 1st, 2nd, 3rd, ...)     |
+| %d            | Día  del mes numérico (00..31)                               |
+| %e            | Día  del mes numérico (0..31)                                |
+| %f            | Microsegundos  (000000..999999)                              |
+| %H            | Hora  (00..23)                                               |
+| %h            | Hora  (01..12)                                               |
+| %I            | Hora  (01..12)                                               |
+| %i            | Minutos,  numérico (00..59)                                  |
+| %j            | Día  del año (001..366)                                      |
+| %k            | Hora  (0..23)                                                |
+| %l            | Hora  (1..12)                                                |
+| %M            | Nombre  mes (January..December)                              |
+| %m            | Mes,  numérico (00..12)                                      |
+| %p            | AM o PM                                                      |
+| %r            | Hora,  12 horas (hh:mm:ss seguido de AM o PM)                |
+| %S            | Segundos  (00..59)                                           |
+| %s            | Segundos  (00..59)                                           |
+| %T            | Hora,  24 horas (hh:mm:ss)                                   |
+| %U            | Semana  (00..53), donde domingo es el primer día de la semana |
+| %u            | Semana  (00..53), donde lunes es el primer día de la semana  |
+| %V            | Semana  (01..53), donde domingo es el primer día de la semana; usado con %X |
+| %v            | Semana  (01..53), donde lunes es el primer día de la semana; usado con %x |
+| %W            | Nombre  día semana (Sunday..Saturday)                        |
+| %w            | Día  de la semana (0=Sunday..6=Saturday)                     |
+| %X            | Año  para la semana donde domingo es el primer día de la semana, numérico, cuatro  dígitos; usado con %V |
+| %x            | Año  para la semana, donde lunes es el primer día de la semana, numérico, cuatro  dígitos; usado con %v |
+| %Y            | Año,  numérico, cuatro dígitos                               |
+| %y            | Año,  numérico (dos dígitos)                                 |
+| %%            | Carácter  '%' literal                                        |
+
+
+
+## Administración de usuarios
+
+Obtener el usuario conectado
+
+```mysql
+SELECT CURRENT_USER();
+-- Alternativa
+SELECT SESSION_USER();
+SELECT SYSTEM_USER();
+SELECT USER();
+```
+
+Obtener la versión de MYSQL
+
+```mysql
+SELECT VERSION();
+```
+
+
+
+```
+ALTER USER 'username'@'%' IDENTIFIED BY 'passworld';
 FLUSH PRIVILEGES;
 ```
 
