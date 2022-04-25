@@ -897,7 +897,7 @@ SELECT Name, STRCMP(Name, "Aruba") FROM Country;
 SELECT Name, MID(Name, 1, 3) FROM Country;
 ```
 
-##  Funciones de fecha y hora
+##  FUNCIONES DE FECHA Y HORA
 
 ### CURDATE() , CURRENT_DATE(), CURTIME(), CURRENT_TIME(), CURRENT_TIMESTAMP() y NOW()
 
@@ -1136,7 +1136,7 @@ SELECT DATE_FORMAT("2022-06-03", "%a")
 
 
 
-## Administración de usuarios
+## MYSQL  AVANZADO
 
 Obtener el usuario conectado
 
@@ -1154,10 +1154,206 @@ Obtener la versión de MYSQL
 SELECT VERSION();
 ```
 
+Obtener la base de datos actual
 
-
+```mysql
+SELECT DATABASE();
 ```
+
+Obtener el ID de conexion
+
+```mysql
+SELECT CONNECTION_ID();
+```
+
+Obtener el ultimo ID 
+
+```mysql
+LAST_INSERT_ID();
+```
+
+> Únicamente aplica con IDs que son auto incrementables. 
+
+Uso del IF
+
+```mysql
+SELECT IF(100>200, "SI", "NO");
+```
+
+## SUB-CONSULTAS
+
+Las subconsultas consisten en utilizar mas de una instrucción por Query. 
+
+```mysql
+SELECT 
+e.emp_no,
+e.first_name,
+e.last_name, 
+e.gender,
+(
+  SELECT MAX(salary) 
+  FROM salaries s 
+  WHERE e.emp_no = s.emp_no
+) AS "Salary"
+FROM employees e
+```
+
+> Es recomendable utilizar alias 
+
+```mysql
+SELECT emp_no, MAX(salary) 
+FROM salaries
+WHERE salary > (
+	SELECT AVG(salary) 
+	FROM salaries
+)
+GROUP BY emp_no
+ORDER BY salary ASC; 
+```
+
+### Sub consultas con  múltiples resultados
+
+```mysql
+/* Salario mayores a 3 salarios en especifico */
+
+SELECT emp_no, MAX(salary)
+FROM salaries
+WHERE salary > ALL (
+	SELECT MAX(salary)
+	FROM salaries 
+	WHERE emp_no IN (10001, 10002, 10003)
+	GROUP BY emp_no
+)
+GROUP BY emp_no
+ORDER BY MAX(Salary) DESC; -- Realiza la condicional en funcion del salario mas alto del IN
+```
+
+```mysql
+SELECT emp_no, MAX(salary)
+FROM salaries
+WHERE salary > ANY (
+	SELECT MAX(salary)
+	FROM salaries 
+	WHERE emp_no IN (10001, 10002, 10003) -- Toma en cuenta los tres valores
+	GROUP BY emp_no
+)
+GROUP BY emp_no
+ORDER BY MAX(Salary) DESC;
+```
+
+## VISTAS
+
+Prácticamente nos permite crear SELECT  pre-determinados. 
+
+Crear una vista
+
+```mysql
+CREATE OR REPLACE VIEW empleados AS SELECT * FROM employees LIMIT 100;
+```
+
+Mostrar la estructura de la vista
+
+```mysql
+SHOW CREATE VIEW empleados;
+```
+
+Mostrar la vista
+
+```mysql
+SELECT * FROM empleados;
+```
+
+Eliminar una vista 
+
+```mysql
+DROP VIEW empleados;
+```
+
+Listar las listas existentes
+
+```mysql
+SHOW FULL TABLES IN employees WHERE TABLE_TYPE LIKE 'VIEW';
+
+-- Alternativa 
+
+SELECT TABLE_SCHEMA, TABLE_NAME 
+FROM information_schema.VIEWS 
+WHERE TABLE_SCHEMA LIKE 'employees';
+```
+
+## ADMINISTRACION DE USUARIOS
+
+Creación de usuario
+
+```mysql
+CREATE USER user1 IDENTIFIED BY "1234";
+-- con acceso solo local
+CREATE USER user2@localhost IDENTIFIED BY "1234";
+-- Acceso desde una IP especifica
+CREATE USER user3@127.0.0.1 IDENTIFIED BY "1234";
+```
+
+Actualizar una contraseña 
+
+```mysql
+SET PASSWORD FOR user1 ='456';
+-- Alternativa
 ALTER USER 'username'@'%' IDENTIFIED BY 'passworld';
 FLUSH PRIVILEGES;
 ```
 
+Asignar permisos
+
+```mysql
+GRANT SELECT, UPDATE, DELETE
+-- [BASEDEDATOS] [TABLA]
+ON employees.salaries
+TO user1; 
+
+-- Asignar multiples permisos
+
+GRANT SELECT, UPDATE, DELETE
+-- [BASEDEDATOS] [TABLA]
+ON employees.*
+TO user1;
+
+-- Asignar permisos sobre campos especificos
+
+GRANT SELECT(emp_no, salary), UPDATE, DELETE
+-- [BASEDEDATOS] [TABLA]
+ON employees.salaries
+TO user2@localhost;
+```
+
+Asignarle todos los permisos a un usuario
+
+```mysql
+GRANT ALL PRIVILEGES
+ON employees.*
+TO user1
+```
+
+Revocar o quitar permisos
+
+```mysql
+REVOKE SELECT
+ON employees.*
+FROM user1
+```
+
+Revocar todos los permisos a un usuario
+
+```mysql
+REVOKE ALL PRIVILEGES
+ON employees.*
+FROM user1
+```
+
+Dar permisos de creacion de usuarios
+
+```mysql
+GRANT CREATE USER
+ON *.*
+TO user1
+WITH GRANT OPTION -- Para que pueda generar permisos
+```
