@@ -1,2 +1,2 @@
 # MYSQL
-Repositorio con los conceptos basicos de manjo de base de datos MYSQL 
+Repositorio con los conceptos basicos de manejo de base de datos MYSQL 
